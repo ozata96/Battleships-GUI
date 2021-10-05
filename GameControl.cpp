@@ -22,7 +22,7 @@ vector<string> GameControl::SetGameBoard()
 {
     vector<string> row;
 
-    row.push_back("                 ENEMY SHIPS                                       YOUR SHIPS               ");
+    row.push_back("                 YOUR SHIPS                                       ENEMY SHIPS               ");
     row.push_back("");
     row.push_back("      1   2   3   4   5   6   7   8   9                 1   2   3   4   5   6   7   8   9   ");
     row.push_back("    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+ ");
@@ -73,81 +73,6 @@ int GameControl::GetNumberDeployable(char shipType)
     }
 };
 
-int GameControl::RowCoordinateMapConvert(char x)
-{
-    switch (x)
-    {
-    case 'A':
-        return 4;
-    case 'B':
-        return 6;
-    case 'C':
-        return 8;
-    case 'D':
-        return 10;
-    case 'E':
-        return 12;
-    case 'F':
-        return 14;
-    case 'G':
-        return 16;
-    case 'H':
-        return 18;
-    case 'I':
-        return 20;
-    case 'J':
-        return 22;
-    default:
-        return 0;
-    }
-};
-
-int GameControl::ColCoordinateMapConvert(char x)
-{
-    int xInt;
-    xInt = x - 48;
-
-    return (xInt * 4) + 2;
-};
-
-void GameControl::ConvertGridToCoordinate(string coordinate, int &row, int &col)
-{
-    row = RowCoordinateMapConvert(coordinate[0]);
-    col = ColCoordinateMapConvert(coordinate[1]);
-};
-
-vector<int> GameControl::TranslateCoordinates(string input)
-{
-    int row = 0;
-    int col = 0;
-    string rowStr = "";
-    string colStr = "";
-
-    vector<int> coordinates;
-
-    // Intaking Row Numbers
-    rowStr.push_back(input[1]);
-    rowStr.push_back(input[2]);
-
-    ConvertGridToCoordinate(rowStr, row, col);
-
-    coordinates.push_back(row);
-    coordinates.push_back(col);
-
-    row = col = 0;
-
-    // Intaking Col numbers
-    colStr.push_back(input[3]);
-    colStr.push_back(input[4]);
-
-    ConvertGridToCoordinate(colStr, row, col);
-
-    coordinates.push_back(row);
-    coordinates.push_back(col);
-
-    return coordinates;
-};
-
 bool GameControl::areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd)
 {
     if (rowStart < 0 || rowStart > 9 || rowEnd < 0 || rowEnd > 9)
@@ -181,20 +106,18 @@ bool GameControl::areValidCoordinates(int numShipBlocks, int rowStart, int colSt
     return false;
 }
 
-// void ShipPlacement(int shipType, int rowStart, int colStart, int rowEnd, int colEnd, vector<string> &grid)
-// {
-//     int locCount = 0;
 
-//     if (!areValidCoordinates(shipType, rowStart, colStart, rowEnd, colEnd))
-//         cerr << endl << endl << "Error, coordinates are not valid" << endl;
-//     else
-//     {
+int GameControl::convertRowForMainGrid(int row)
+{
+    return ((row + 4) + (row * 2) - row);
+}
 
-//     }
+int GameControl::convertColForMainGrid(int col)
+{
+    return ((col + 6) + (col * 4) - col);
+}
 
-// }
-
-void GameControl::SimpleGridIntake(string input)
+void GameControl::SimpleGridIntake(string input, vector<string> &grid)
 {
     int rowStart, colStart, rowEnd, colEnd;
 
@@ -206,17 +129,29 @@ void GameControl::SimpleGridIntake(string input)
     colEnd = input[4] - 49;
 
     if (!areValidCoordinates(numDeployed, rowStart, colStart, rowEnd, colEnd))
-        cout << "Invalid Coordinates" << endl;
+        cerr << "Invalid Coordinates" << endl;
     else
     {
 
         if (rowStart == rowEnd)
             for (int i = colStart; i <= colEnd; i++)
-                simpleGrid[rowStart][i] = 'o';
+                if (simpleGrid[rowStart][i] == '.')
+                {
+                    simpleGrid[rowStart][i] = 'o';
+                    grid[convertRowForMainGrid(rowStart)][convertColForMainGrid(i)] = 'o';
+                }
+                else
+                    cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
 
-        else if (colStart == colEnd)
+        if (colStart == colEnd)
             for (int i = rowStart; i <= rowEnd; i++)
-                simpleGrid[i][colStart] = 'o';
+                if (simpleGrid[i][colStart] == '.')
+                {
+                    simpleGrid[i][colStart] = 'o';
+                    grid[convertRowForMainGrid(i)][convertColForMainGrid(colStart)] = 'o';
+                }
+                else
+                    cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
 
         for (int i = 0; i < 10; i++)
             cout << simpleGrid[i] << endl;
@@ -227,12 +162,12 @@ void GameControl::IntakeCoordinates(string input, vector<string> &grid)
 {
     vector<int> gridCoordinates;
 
-    gridCoordinates = TranslateCoordinates(input);
+    // gridCoordinates = TranslateCoordinates(input);
 
-    SimpleGridIntake(input);
+    SimpleGridIntake(input, grid);
 
-    grid[gridCoordinates[0]][gridCoordinates[1]] = 'o';
-    grid[gridCoordinates[2]][gridCoordinates[3]] = 'o';
+    // grid[gridCoordinates[0]][gridCoordinates[1]] = 'o';
+    // grid[gridCoordinates[2]][gridCoordinates[3]] = 'o';
 
     // for (int i = 0; i < gridCoordinates.size(); i++)
     // {
@@ -250,3 +185,29 @@ void GameControl::IntakeCoordinates(string input, vector<string> &grid)
 // .........
 // .........
 // .........
+
+/*
+ROW CONVERSION
+(x+4) + (x*2) - x
+[0] -> [4]          - 4
+[1] -> [6]          - 6
+[2] -> [8]          - 8
+[3] -> [10]         - 10
+[4] -> [12]         - 
+[5] -> [14]         -
+[6] -> [18]         -
+[7] -> [22]         -
+
+
+COL CONVERSION
+(x + 6) + (x * 4) - x
+[0] -> [6]          - 6
+[1] -> [10]         - 10
+[2] -> [14]         - 
+[3] -> [18]         - 
+[4] -> [22]         - 
+[5] -> [26]         - 
+[6] -> [30]         -
+[7] -> [34]         -
+[8] -> [38]         -
+*/
