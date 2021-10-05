@@ -1,11 +1,28 @@
 #include "GameControl.hpp"
 using namespace std;
 
+GameControl::GameControl()
+{
+    string row = "";
 
-vector<string> GameControl::SetGameBoard(){
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            row.push_back('.');
+        }
+        simpleGrid.push_back(row);
+        row = "";
+    }
+};
+
+GameControl::~GameControl(){};
+
+vector<string> GameControl::SetGameBoard()
+{
     vector<string> row;
 
-    row.push_back("                   ENEMY SHIPS                                              YOUR SHIPS");
+    row.push_back("                 ENEMY SHIPS                                       YOUR SHIPS               ");
     row.push_back("");
     row.push_back("      1   2   3   4   5   6   7   8   9                 1   2   3   4   5   6   7   8   9   ");
     row.push_back("    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+ ");
@@ -108,11 +125,10 @@ vector<int> GameControl::TranslateCoordinates(string input)
 
     vector<int> coordinates;
 
-
     // Intaking Row Numbers
     rowStr.push_back(input[1]);
     rowStr.push_back(input[2]);
-    
+
     ConvertGridToCoordinate(rowStr, row, col);
 
     coordinates.push_back(row);
@@ -130,28 +146,107 @@ vector<int> GameControl::TranslateCoordinates(string input)
     coordinates.push_back(col);
 
     return coordinates;
-
 };
+
+bool GameControl::areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd)
+{
+    if (rowStart < 0 || rowStart > 9 || rowEnd < 0 || rowEnd > 9)
+    {
+        return false;
+    }
+    if (colStart < 0 || colStart > 8 || colEnd < 0 || colEnd > 8)
+    {
+        return false;
+    }
+    if (rowStart != rowEnd)
+        if (colStart != colEnd)
+        {
+            return false;
+        }
+    if (rowStart == rowEnd)
+        if (numShipBlocks - 1 == (colEnd - colStart))
+        {
+            return true;
+        }
+
+    if (colStart == colEnd)
+    {
+        if (numShipBlocks - 1 == (rowEnd - rowStart))
+        {
+            return true;
+        }
+    }
+    // cout << numShipBlocks << " , " << colEnd - colStart << endl;
+    // cout << numShipBlocks << " , " << rowEnd - rowStart << endl;
+    return false;
+}
+
+// void ShipPlacement(int shipType, int rowStart, int colStart, int rowEnd, int colEnd, vector<string> &grid)
+// {
+//     int locCount = 0;
+
+//     if (!areValidCoordinates(shipType, rowStart, colStart, rowEnd, colEnd))
+//         cerr << endl << endl << "Error, coordinates are not valid" << endl;
+//     else
+//     {
+
+//     }
+
+// }
+
+void GameControl::SimpleGridIntake(string input)
+{
+    int rowStart, colStart, rowEnd, colEnd;
+
+    int numDeployed = GetNumberDeployable(input[0]);
+
+    rowStart = input[1] - 65;
+    colStart = input[2] - 49;
+    rowEnd = input[3] - 65;
+    colEnd = input[4] - 49;
+
+    if (!areValidCoordinates(numDeployed, rowStart, colStart, rowEnd, colEnd))
+        cout << "Invalid Coordinates" << endl;
+    else
+    {
+
+        if (rowStart == rowEnd)
+            for (int i = colStart; i <= colEnd; i++)
+                simpleGrid[rowStart][i] = 'o';
+
+        else if (colStart == colEnd)
+            for (int i = rowStart; i <= rowEnd; i++)
+                simpleGrid[i][colStart] = 'o';
+
+        for (int i = 0; i < 10; i++)
+            cout << simpleGrid[i] << endl;
+    }
+}
 
 void GameControl::IntakeCoordinates(string input, vector<string> &grid)
 {
-    vector<int> finalCoordinates;
-    vector<int> tempCoordinates;
+    vector<int> gridCoordinates;
 
-    int numDeployed = GetNumberDeployable(input[0]);
-    finalCoordinates.push_back(numDeployed);
+    gridCoordinates = TranslateCoordinates(input);
 
-    tempCoordinates = TranslateCoordinates(input);
+    SimpleGridIntake(input);
 
-    for (int i = 0; i < tempCoordinates.size(); i++){
-        finalCoordinates.push_back(tempCoordinates[i]);
-    }
+    grid[gridCoordinates[0]][gridCoordinates[1]] = 'o';
+    grid[gridCoordinates[2]][gridCoordinates[3]] = 'o';
 
-    for (int i = 0; i < finalCoordinates.size(); i++)
-    {
-        cout << finalCoordinates[i] << endl;
-    }
-
-    grid[finalCoordinates[1]][finalCoordinates[2]] = 'o';
-    grid[finalCoordinates[3]][finalCoordinates[4]] = 'o';
+    // for (int i = 0; i < gridCoordinates.size(); i++)
+    // {
+    //     cout << gridCoordinates[i] << " , ";
+    // }
 };
+
+// .........
+// .........
+// .........
+// .........
+// .........
+// .........
+// .........
+// .........
+// .........
+// .........
