@@ -10,13 +10,11 @@ private:
     
     bool CheckString(string input);
     int GetNumberDeployable(char shipType);
-    int RowCoordinateMapConvert(char x);
-    int ColCoordinateMapConvert(char x);
-    void ConvertGridToCoordinate(string coordinate, int &row, int &col);
-    vector<int> TranslateCoordinates(string input);
-    void SimpleGridIntake(string input);
+    void SimpleGridIntake(string input, vector<string> &grid);
     bool areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd);
-    
+    int convertRowForMainGrid(int row);
+    int convertColForMainGrid(int col);
+
 public:
     GameControl();
     ~GameControl();
