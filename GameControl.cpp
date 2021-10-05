@@ -7,33 +7,33 @@ vector<string> GameControl::SetGameBoard(){
 
     row.push_back("                   ENEMY SHIPS                                              YOUR SHIPS");
     row.push_back("");
-    row.push_back("      1   2   3   4   5   6   7   8   9   10                  1   2   3   4   5   6   7   8   9   10 ");
-    row.push_back("    +===+===+===+===+===+===+===+===+===+===+               +===+===+===+===+===+===+===+===+===+===+");
-    row.push_back("A   |   :   :   :   :   :   :   :   :   :   |           A   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("B   |   :   :   :   :   :   :   :   :   :   |           B   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("C   |   :   :   :   :   :   :   :   :   :   |           C   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("D   |   :   :   :   :   :   :   :   :   :   |           D   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("E   |   :   :   :   :   :   :   :   :   :   |           E   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("F   |   :   :   :   :   :   :   :   :   :   |           F   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("G   |   :   :   :   :   :   :   :   :   :   |           G   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("H   |   :   :   :   :   :   :   :   :   :   |           H   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("I   |   :   :   :   :   :   :   :   :   :   |           I   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
-    row.push_back("J   |   :   :   :   :   :   :   :   :   :   |           J   |   :   :   :   :   :   :   :   :   :   |");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+---+               +---+---+---+---+---+---+---+---+---+---+");
+    row.push_back("      1   2   3   4   5   6   7   8   9                 1   2   3   4   5   6   7   8   9   ");
+    row.push_back("    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+ ");
+    row.push_back("A   |   :   :   :   :   :   :   :   :   |         A   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("B   |   :   :   :   :   :   :   :   :   |         B   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("C   |   :   :   :   :   :   :   :   :   |         C   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("D   |   :   :   :   :   :   :   :   :   |         D   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("E   |   :   :   :   :   :   :   :   :   |         E   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("F   |   :   :   :   :   :   :   :   :   |         F   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("G   |   :   :   :   :   :   :   :   :   |         G   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("H   |   :   :   :   :   :   :   :   :   |         H   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("I   |   :   :   :   :   :   :   :   :   |         I   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("J   |   :   :   :   :   :   :   :   :   |         J   |   :   :   :   :   :   :   :   :   | ");
+    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
     row.push_back("");
-    row.push_back("            Radar Ship  [R]                                          Radar Ship  [R]          ");
-    row.push_back("            Minor Ship  [M]                                          Minor Ship  [M]          ");
-    row.push_back("            Battleship  [B]                                          Battleship  [B]          ");
-    row.push_back("            Flagship    [F]                                          Flagship    [F]          ");
+    row.push_back("         oo      Radar Ship  [R]                           oo      Radar Ship  [R]          ");
+    row.push_back("         ooo     Minor Ship  [M]                           ooo     Minor Ship  [M]          ");
+    row.push_back("         oooo    Battleship  [B]                           oooo    Battleship  [B]          ");
+    row.push_back("         ooooo   Flagship    [F]                           ooooo   Flagship    [F]          ");
 
     return row;
 };
@@ -133,7 +133,7 @@ vector<int> GameControl::TranslateCoordinates(string input)
 
 };
 
-void GameControl::IntakeCoordinates(string input)
+void GameControl::IntakeCoordinates(string input, vector<string> &grid)
 {
     vector<int> finalCoordinates;
     vector<int> tempCoordinates;
@@ -151,4 +151,7 @@ void GameControl::IntakeCoordinates(string input)
     {
         cout << finalCoordinates[i] << endl;
     }
+
+    grid[finalCoordinates[1]][finalCoordinates[2]] = 'o';
+    grid[finalCoordinates[3]][finalCoordinates[4]] = 'o';
 };
