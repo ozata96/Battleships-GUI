@@ -6,20 +6,33 @@ using namespace std;
 class GameControl
 {
 private:
+
+    
     bool CheckString(string input);
     int GetNumberDeployable(char shipType);
     int RowCoordinateMapConvert(char x);
     int ColCoordinateMapConvert(char x);
     void ConvertGridToCoordinate(string coordinate, int &row, int &col);
     vector<int> TranslateCoordinates(string input);
+    void SimpleGridIntake(string input);
+    bool areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd);
     
 public:
+    GameControl();
+    ~GameControl();
+
+    // Simple Grid
+    vector<string> simpleGrid;
+
+    // functions
     vector<string> SetGameBoard();
-    void IntakeCoordinates(string input);
+    void IntakeCoordinates(string input, vector<string> &grid);
+
+
 };
 
 /*
-RSA1A5
+R A1 J8
 
 
 [0][0] = [4][6]
@@ -27,10 +40,14 @@ RSA1A5
 [0][2] = [4][14]
 [0][3] = [4][18]
 
+
 [1][0] = [6][6]
 [1][1] = [6][10]
 [1][2] = [6][14]
 [1][3] = [6][18]
+
+[9][8] = [22][38]
+
 
 
 x -> y
