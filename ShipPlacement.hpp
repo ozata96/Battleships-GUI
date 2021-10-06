@@ -6,8 +6,18 @@ using namespace std;
 class ShipPlacement
 {
 private:
+    // Friendly Ship Placement
 
-    
+
+    // Enemy Ship Placement
+    bool enemyFlagShipPlaced = false;
+    bool enemyDestroyerShipPlaced = false;
+    bool enemyMinorShipPlaced = false;
+    bool enemyRadarShipPlaced = false;
+
+    void ClearGrid(vector<string> &grid, vector<int> targetCoordinates);
+
+    // Friendly Ship Functions
     bool CheckString(string input);
     int GetNumberDeployable(char shipType);
     bool areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd);
@@ -15,18 +25,26 @@ private:
     int convertColForMainGrid(int col);
     void CreateShip(int numDeployed);
 
+    // Enemy Ship Functions
+    void RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType);
+    int RandomNumberGenerator(int min, int max);
+
 public:
+    bool friendlyFlagShipPlaced = false;
+    bool friendlyDestroyerShipPlaced = false;
+    bool friendlyMinorShipPlaced = false;
+    bool friendlyRadarShipPlaced = false;
+
     ShipPlacement();
     ~ShipPlacement();
 
-    // Simple Grid
-    vector<string> simpleGrid;
+    // Logic Grids
+    vector<string> friendlyGrid;
+    vector<string> enemyGrid;
 
     // functions
     vector<string> SetGameBoard();
-    void SimpleGridIntake(string input, vector<string> &grid);
-
-
+    void FriendlyGridIntake(string input, vector<string> &grid);
 };
 
 /*
