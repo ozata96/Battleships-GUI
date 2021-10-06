@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
+
 #include "ShipPlacement.hpp"
 #include "Battleship.hpp"
 
 using namespace std;
-
 
 int main()
 {
@@ -15,9 +15,12 @@ int main()
     vector<string> table;
     table = shipPlacement.SetGameBoard();
 
+    shipPlacement.FriendlyGridIntake("RA1A2", table);
+    shipPlacement.FriendlyGridIntake("MB1B3", table);
+    shipPlacement.FriendlyGridIntake("DC1C4", table);
+    shipPlacement.FriendlyGridIntake("FD1D5", table);
 
-    shipPlacement.SimpleGridIntake("FA1A5", table);
-    // shipPlacement.IntakeCoordinates("FB2F2", table);
+
 
 
     cout << endl << endl << endl;
@@ -27,3 +30,4 @@ int main()
     }
     cout << endl << endl;
 }
+

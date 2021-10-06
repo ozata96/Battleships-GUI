@@ -184,16 +184,23 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                     break;
                 }
 
-        cout << "----------Friendly Ships------------" << endl;
-        for (int i = 0; i < 10; i++)
-            cout << friendlyGrid[i] << endl;
-
-        RandomEnemyShipPlacement();
-        cout << "----------Enemy Ships------------" << endl;
-        for (int i = 0; i < 10; i++)
-            cout << enemyGrid[i] << endl;
+        // cout << "----------Friendly Ships------------" << endl;
+        // for (int i = 0; i < 10; i++)
+        //     cout << friendlyGrid[i] << endl;
 
         CreateShip(numDeployed);
+        if (friendlyFlagShipPlaced && friendlyDestroyerShipPlaced && friendlyMinorShipPlaced && friendlyRadarShipPlaced)
+        {
+            cout << "YOOOOOO" << endl;
+            RandomEnemyShipPlacement(2, enemyRadarShipPlaced);
+            RandomEnemyShipPlacement(3, enemyMinorShipPlaced);
+            RandomEnemyShipPlacement(4, enemyDestroyerShipPlaced);
+            RandomEnemyShipPlacement(5, enemyFlagShipPlaced);
+
+            cout << "----------Enemy Ships------------" << endl;
+            for (int i = 0; i < 10; i++)
+                cout << enemyGrid[i] << endl;
+        }
     }
 };
 
@@ -206,73 +213,154 @@ int ShipPlacement::RandomNumberGenerator(int min, int max)
     return dist6(rng);
 }
 
-void ShipPlacement::RandomEnemyShipPlacement()
+void ShipPlacement::ClearGrid(vector<string> &grid, vector<int> targetCoordinates)
 {
-    // while (enemyFlagShipPlaced == false)
-    // {
+    for (int i = 0; i < targetCoordinates.size(); i++)
+    {
+        grid[targetCoordinates[i]][targetCoordinates[i + 1]] = '.';
+        // cout << targetCoordinates[i] << "," << targetCoordinates[i + 1] << endl;
+        i++;
+    }
+}
+
+void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
+{
+    int count = 0;
+    int tracker = 0;
+    vector<int> tempCoordinates;
+
+    while (enemyShipType == false)
+    {
         int flip = RandomNumberGenerator(0, 1);
 
         // Flagship Placement
-        int startRow = RandomNumberGenerator(0, 9);
-        int startCol = RandomNumberGenerator(0, 8);
+        int rowStart = RandomNumberGenerator(0, 9);
+        int colStart = RandomNumberGenerator(0, 8);
 
-        cout << startRow << " , " << startCol << endl;
-        enemyGrid[startRow][startCol] = 'o';
+        // cout << rowStart << " , " << colStart << endl;
+        // enemyGrid[rowStart][colStart] = 'o';
 
-        // horizontal
-        // if (flip == 1)
-        // {
-            for (int i = startRow; i <= startRow + 4; i++)
-                if (enemyGrid[startRow][i] == '.')
+        if (flip == 0)
+        {
+            // VERTICAL
+            for (int i = rowStart; i >= 0; i--)
+            {
+                tracker++;
+                if (enemyGrid[i][colStart] == '.')
                 {
-                    enemyGrid[startRow][i] = 'o';
-                    if (i == startRow + 4)
-                        enemyFlagShipPlaced = true;
+                    enemyGrid[i][colStart] = 'o';
+                    count++;
+                    tempCoordinates.push_back(i);
+                    tempCoordinates.push_back(colStart);
                 }
-                else
+                if (count == shipBlocks)
                     break;
-        // }
-    // }
-    // vertical
+                if (count != tracker)
+                    break;
+            }
+            if (count < shipBlocks)
+            {
+                ClearGrid(enemyGrid, tempCoordinates);
+                tempCoordinates.clear();
+                count = 0;
+                tracker = 0;
+
+                for (int i = rowStart; i < 10; i++)
+                {
+                    tracker++;
+                    if (enemyGrid[i][colStart] == '.')
+                    {
+                        enemyGrid[i][colStart] = 'o';
+                        count++;
+                        tempCoordinates.push_back(i);
+                        tempCoordinates.push_back(colStart);
+                    }
+                    if (count == shipBlocks)
+                        break;
+                    if (count != tracker)
+                        break;
+                }
+                if (count < shipBlocks)
+                {
+                    ClearGrid(enemyGrid, tempCoordinates);
+                    tempCoordinates.clear();
+                    count = 0;
+                    tracker = 0;
+                }
+
+                if (count == shipBlocks)
+                {
+                    tempCoordinates.clear();
+                    enemyShipType = true;
+                }
+            }
+
+            else if (count == shipBlocks)
+            {
+                tempCoordinates.clear();
+                enemyShipType = true;
+            }
+        }
+
+        else
+        {
+            // HORIZONTAL
+
+            for (int i = colStart; i >= 0; i--)
+            {
+                tracker++;
+                if (enemyGrid[rowStart][i] == '.')
+                {
+                    enemyGrid[rowStart][i] = 'o';
+                    count++;
+                    tempCoordinates.push_back(rowStart);
+                    tempCoordinates.push_back(i);
+                }
+                if (count == shipBlocks)
+                    break;
+                if (count != tracker)
+                    break;
+            }
+            if (count < shipBlocks)
+            {
+                ClearGrid(enemyGrid, tempCoordinates);
+                tempCoordinates.clear();
+                count = 0;
+                tracker = 0;
+                for (int i = colStart; i < 9; i++)
+                {
+                    tracker++;
+                    if (enemyGrid[rowStart][i] == '.')
+                    {
+                        enemyGrid[rowStart][i] = 'o';
+                        count++;
+                        tempCoordinates.push_back(rowStart);
+                        tempCoordinates.push_back(i);
+                    }
+                    if (count == shipBlocks)
+                        break;
+                    if (count != tracker)
+                        break;
+                }
+                if (count < shipBlocks)
+                {
+                    ClearGrid(enemyGrid, tempCoordinates);
+                    tempCoordinates.clear();
+                    count = 0;
+                    tracker = 0;
+                }
+
+                if (count == shipBlocks)
+                {
+                    tempCoordinates.clear();
+                    enemyShipType = true;
+                }
+            }
+            else if (count == shipBlocks)
+            {
+                tempCoordinates.clear();
+                enemyShipType = true;
+            }
+        }
+    }
 };
-
-/*
-
-
-
-
-.........
-.........
-.........
-.........
-.........
-.........
-.........
-.........
-.........
-.........
-
-      1   2   3   4   5   6   7   8   9                 1   2   3   4   5   6   7   8   9
-    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+
-A   |   :   :   :   :   :   :   :   :   |         A   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-B   |   :   :   :   :   :   :   :   :   |         B   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-C   |   :   :   :   :   :   :   :   :   |         C   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-D   |   :   :   :   :   :   :   :   :   |         D   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-E   |   :   :   :   :   :   :   :   :   |         E   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-F   |   :   :   :   :   :   :   :   :   |         F   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-G   |   :   :   :   :   :   :   :   :   |         G   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-H   |   :   :   :   :   :   :   :   :   |         H   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-I   |   :   :   :   :   :   :   :   :   |         I   |   :   :   :   :   :   :   :   :   |
-    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
-J   |   :   :   :   :   :   :   :   :   |         J   |   :   :   :   :   :   :   :   :   |
-    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+
-
-*/
