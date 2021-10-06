@@ -1,5 +1,5 @@
 #include "ShipPlacement.hpp"
-using namespace std;
+#include "BattleShip.hpp"
 
 ShipPlacement::ShipPlacement()
 {
@@ -49,7 +49,7 @@ vector<string> ShipPlacement::SetGameBoard()
     row.push_back("");
     row.push_back("         oo      Radar Ship  [R]                           oo      Radar Ship  [R]          ");
     row.push_back("         ooo     Minor Ship  [M]                           ooo     Minor Ship  [M]          ");
-    row.push_back("         oooo    Battleship  [B]                           oooo    Battleship  [B]          ");
+    row.push_back("         oooo    Destroyer   [D]                           oooo    Destroyer   [D]          ");
     row.push_back("         ooooo   Flagship    [F]                           ooooo   Flagship    [F]          ");
 
     return row;
@@ -64,7 +64,7 @@ int ShipPlacement::GetNumberDeployable(char shipType)
         return 2;
     case 'M':
         return 3;
-    case 'B':
+    case 'D':
         return 4;
     case 'F':
         return 5;
@@ -106,7 +106,6 @@ bool ShipPlacement::areValidCoordinates(int numShipBlocks, int rowStart, int col
     return false;
 };
 
-
 int ShipPlacement::convertRowForMainGrid(int row)
 {
     return ((row + 4) + (row * 2) - row);
@@ -115,6 +114,19 @@ int ShipPlacement::convertRowForMainGrid(int row)
 int ShipPlacement::convertColForMainGrid(int col)
 {
     return ((col + 6) + (col * 4) - col);
+};
+
+void ShipPlacement::CreateShip(int numDeployed)
+{
+    // 2, 3, 4, 5
+    if (numDeployed == 5)
+        FlagShip friendlyFlagShip;
+    else if (numDeployed == 4)
+        DestroyerShip friendlyDestroyerShip;
+    else if (numDeployed == 3)
+        DestroyerShip friendlyMinorShip;
+    else if (numDeployed == 2)
+        DestroyerShip friendlyRadarShip;
 };
 
 void ShipPlacement::SimpleGridIntake(string input, vector<string> &grid)
@@ -132,7 +144,6 @@ void ShipPlacement::SimpleGridIntake(string input, vector<string> &grid)
         cerr << "Invalid Coordinates" << endl;
     else
     {
-
         if (rowStart == rowEnd)
             for (int i = colStart; i <= colEnd; i++)
                 if (simpleGrid[rowStart][i] == '.')
@@ -155,35 +166,10 @@ void ShipPlacement::SimpleGridIntake(string input, vector<string> &grid)
 
         for (int i = 0; i < 10; i++)
             cout << simpleGrid[i] << endl;
+
+        CreateShip(numDeployed);
     }
 };
-
-void ShipPlacement::IntakeCoordinates(string input, vector<string> &grid)
-{
-    vector<int> gridCoordinates;
-
-    // gridCoordinates = TranslateCoordinates(input);
-
-    SimpleGridIntake(input, grid);
-
-    // grid[gridCoordinates[0]][gridCoordinates[1]] = 'o';
-    // grid[gridCoordinates[2]][gridCoordinates[3]] = 'o';
-
-    // for (int i = 0; i < gridCoordinates.size(); i++)
-    // {
-    //     cout << gridCoordinates[i] << " , ";
-    // }
-};
-
-
-
-
-
-
-
-
-
-
 
 // .........
 // .........

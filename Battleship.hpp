@@ -1,42 +1,44 @@
-class Battleship
+class BattleShip
 {
 protected:
     int blocks;
-    Battleship(int blocks);
-    ~Battleship();
+    int shipCounter;
+    BattleShip(int blocks);
+    ~BattleShip();
 
 public:
     virtual int GetBlockNumber() = 0;
+    void DestroyBlock();
 };
 
-class Flagship : public Battleship
+class FlagShip : public BattleShip
 {
 public:
-    Flagship();
-    ~Flagship();
+    FlagShip();
+    ~FlagShip();
     int GetBlockNumber() override;
 };
 
-class Destroyership : public Battleship
+class DestroyerShip : public BattleShip
 {
 public:
-    Destroyership();
-    ~Destroyership();
+    DestroyerShip();
+    ~DestroyerShip();
     int GetBlockNumber() override;
 };
 
-class Minorship : public Battleship
+class MinorShip : public BattleShip
 {
 public:
-    Minorship();
-    ~Minorship();
+    MinorShip();
+    ~MinorShip();
     int GetBlockNumber() override;
 };
 
-class Radarship : public Battleship
+class RadarShip : public BattleShip
 {
 public:
-    Radarship();
-    ~Radarship();
+    RadarShip();
+    ~RadarShip();
     int GetBlockNumber() override;
 };

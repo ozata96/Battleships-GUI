@@ -10,10 +10,10 @@ private:
     
     bool CheckString(string input);
     int GetNumberDeployable(char shipType);
-    void SimpleGridIntake(string input, vector<string> &grid);
     bool areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd);
     int convertRowForMainGrid(int row);
     int convertColForMainGrid(int col);
+    void CreateShip(int numDeployed);
 
 public:
     ShipPlacement();
@@ -24,7 +24,7 @@ public:
 
     // functions
     vector<string> SetGameBoard();
-    void IntakeCoordinates(string input, vector<string> &grid);
+    void SimpleGridIntake(string input, vector<string> &grid);
 
 
 };
