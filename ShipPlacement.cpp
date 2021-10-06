@@ -1,3 +1,4 @@
+#include <random>
 #include "ShipPlacement.hpp"
 #include "BattleShip.hpp"
 
@@ -11,7 +12,8 @@ ShipPlacement::ShipPlacement()
         {
             row.push_back('.');
         }
-        simpleGrid.push_back(row);
+        friendlyGrid.push_back(row);
+        enemyGrid.push_back(row);
         row = "";
     }
 };
@@ -45,7 +47,7 @@ vector<string> ShipPlacement::SetGameBoard()
     row.push_back("I   |   :   :   :   :   :   :   :   :   |         I   |   :   :   :   :   :   :   :   :   | ");
     row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
     row.push_back("J   |   :   :   :   :   :   :   :   :   |         J   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
+    row.push_back("    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+ ");
     row.push_back("");
     row.push_back("         oo      Radar Ship  [R]                           oo      Radar Ship  [R]          ");
     row.push_back("         ooo     Minor Ship  [M]                           ooo     Minor Ship  [M]          ");
@@ -120,16 +122,28 @@ void ShipPlacement::CreateShip(int numDeployed)
 {
     // 2, 3, 4, 5
     if (numDeployed == 5)
+    {
         FlagShip friendlyFlagShip;
+        friendlyFlagShipPlaced = true;
+    }
     else if (numDeployed == 4)
+    {
         DestroyerShip friendlyDestroyerShip;
+        friendlyDestroyerShipPlaced = true;
+    }
     else if (numDeployed == 3)
+    {
         DestroyerShip friendlyMinorShip;
+        friendlyMinorShipPlaced = true;
+    }
     else if (numDeployed == 2)
+    {
         DestroyerShip friendlyRadarShip;
+        friendlyRadarShipPlaced = true;
+    }
 };
 
-void ShipPlacement::SimpleGridIntake(string input, vector<string> &grid)
+void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
 {
     int rowStart, colStart, rowEnd, colEnd;
 
@@ -146,64 +160,119 @@ void ShipPlacement::SimpleGridIntake(string input, vector<string> &grid)
     {
         if (rowStart == rowEnd)
             for (int i = colStart; i <= colEnd; i++)
-                if (simpleGrid[rowStart][i] == '.')
+                if (friendlyGrid[rowStart][i] == '.')
                 {
-                    simpleGrid[rowStart][i] = 'o';
+                    friendlyGrid[rowStart][i] = 'o';
                     grid[convertRowForMainGrid(rowStart)][convertColForMainGrid(i)] = 'o';
                 }
                 else
-                    cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
-
-        if (colStart == colEnd)
-            for (int i = rowStart; i <= rowEnd; i++)
-                if (simpleGrid[i][colStart] == '.')
                 {
-                    simpleGrid[i][colStart] = 'o';
+                    cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
+                    break;
+                }
+
+        else if (colStart == colEnd)
+            for (int i = rowStart; i <= rowEnd; i++)
+                if (friendlyGrid[i][colStart] == '.')
+                {
+                    friendlyGrid[i][colStart] = 'o';
                     grid[convertRowForMainGrid(i)][convertColForMainGrid(colStart)] = 'o';
                 }
                 else
+                {
                     cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
+                    break;
+                }
 
+        cout << "----------Friendly Ships------------" << endl;
         for (int i = 0; i < 10; i++)
-            cout << simpleGrid[i] << endl;
+            cout << friendlyGrid[i] << endl;
+
+        RandomEnemyShipPlacement();
+        cout << "----------Enemy Ships------------" << endl;
+        for (int i = 0; i < 10; i++)
+            cout << enemyGrid[i] << endl;
 
         CreateShip(numDeployed);
     }
 };
 
-// .........
-// .........
-// .........
-// .........
-// .........
-// .........
-// .........
-// .........
-// .........
-// .........
+int ShipPlacement::RandomNumberGenerator(int min, int max)
+{
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
+    // cout << dist6(rng) << " ";
+    return dist6(rng);
+}
+
+void ShipPlacement::RandomEnemyShipPlacement()
+{
+    // while (enemyFlagShipPlaced == false)
+    // {
+        int flip = RandomNumberGenerator(0, 1);
+
+        // Flagship Placement
+        int startRow = RandomNumberGenerator(0, 9);
+        int startCol = RandomNumberGenerator(0, 8);
+
+        cout << startRow << " , " << startCol << endl;
+        enemyGrid[startRow][startCol] = 'o';
+
+        // horizontal
+        // if (flip == 1)
+        // {
+            for (int i = startRow; i <= startRow + 4; i++)
+                if (enemyGrid[startRow][i] == '.')
+                {
+                    enemyGrid[startRow][i] = 'o';
+                    if (i == startRow + 4)
+                        enemyFlagShipPlaced = true;
+                }
+                else
+                    break;
+        // }
+    // }
+    // vertical
+};
 
 /*
-ROW CONVERSION
-(x+4) + (x*2) - x
-[0] -> [4]          - 4
-[1] -> [6]          - 6
-[2] -> [8]          - 8
-[3] -> [10]         - 10
-[4] -> [12]         - 
-[5] -> [14]         -
-[6] -> [18]         -
-[7] -> [22]         -
 
 
-COL CONVERSION
-(x + 6) + (x * 4) - x
-[0] -> [6]          - 6
-[1] -> [10]         - 10
-[2] -> [14]         - 
-[3] -> [18]         - 
-[4] -> [22]         - 
-[5] -> [26]         - 
-[6] -> [30]         -
-[7] -> [34]         -
-[8] -> [38]         -
+
+
+.........
+.........
+.........
+.........
+.........
+.........
+.........
+.........
+.........
+.........
+
+      1   2   3   4   5   6   7   8   9                 1   2   3   4   5   6   7   8   9
+    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+
+A   |   :   :   :   :   :   :   :   :   |         A   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+B   |   :   :   :   :   :   :   :   :   |         B   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+C   |   :   :   :   :   :   :   :   :   |         C   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+D   |   :   :   :   :   :   :   :   :   |         D   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+E   |   :   :   :   :   :   :   :   :   |         E   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+F   |   :   :   :   :   :   :   :   :   |         F   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+G   |   :   :   :   :   :   :   :   :   |         G   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+H   |   :   :   :   :   :   :   :   :   |         H   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+I   |   :   :   :   :   :   :   :   :   |         I   |   :   :   :   :   :   :   :   :   |
+    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+
+J   |   :   :   :   :   :   :   :   :   |         J   |   :   :   :   :   :   :   :   :   |
+    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+
+
 */
