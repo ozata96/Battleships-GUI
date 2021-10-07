@@ -6,47 +6,42 @@ Engagement::~Engagement(){};
 
 // Functions
 
-void Engagement::Fight(vector<string> &enemyGrid)
+void Engagement::Strike(int row, int col, vector<string> &logicGrid, vector<string> &display)
 {
-
-    int x, y;
-    while (x != 20)
-    {
-        cout << "----------Enemy Ships------------" << endl;
-        for (int i = 0; i < 10; i++)
-            cout << enemyGrid[i] << endl;
-
-        cout << "ROW: ";
-        cin >> x;
-        cout << endl
-             << "COL: ";
-        cin >> y;
-        cout << endl;
-        Strike(x, y, enemyGrid);
-    }
-}
-
-void Engagement::Strike(int row, int col, vector<string> &grid)
-{
-    switch (grid[row][col])
+    switch (logicGrid[row][col])
     {
     case '.':
-        Miss(row, col, grid);
+        Miss(row, col, display);
         break;
     case 'o':
-        Hit(row, col, grid);
+        Hit(row, col, display);
         break;
+    default:
+        cerr << "error" << endl;
     }
 };
 
-void Engagement::Hit(int row, int col, vector<string> &grid)
+int Engagement::ConvertRow(int row)
+{
+    return ((row + 4) + (row * 2)) - row;
+}
+
+int Engagement::ConvertCol(int col)
+{
+    return ((col + 56) + (col * 4)) - col;
+}
+
+void Engagement::Hit(int row, int col, vector<string> &display)
 {
     cout << "HIT!" << endl;
-    grid[row][col] = 'H';
+    row = ConvertRow(row);
+    col = ConvertCol(col);
+    display[row][col] = 'H';
 };
 
-void Engagement::Miss(int row, int col, vector<string> &grid)
+void Engagement::Miss(int row, int col, vector<string> &display)
 {
     cout << "MISS!" << endl;
-    grid[row][col] = 'M';
-};
+    row = ConvertRow(row);
+    col = ConvertCol(col);
+    display[row][col] = 'M';};

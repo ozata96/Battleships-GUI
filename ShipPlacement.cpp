@@ -156,12 +156,10 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
         CreateShip(numDeployed);
         if (friendlyFlagShipPlaced && friendlyDestroyerShipPlaced && friendlyMinorShipPlaced && friendlyRadarShipPlaced)
         {
-            cout << "YOOOOOO" << endl;
             RandomEnemyShipPlacement(2, enemyRadarShipPlaced);
             RandomEnemyShipPlacement(3, enemyMinorShipPlaced);
             RandomEnemyShipPlacement(4, enemyDestroyerShipPlaced);
             RandomEnemyShipPlacement(5, enemyFlagShipPlaced);
-
         }
     }
 };
