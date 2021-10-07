@@ -1,3 +1,6 @@
+#ifndef ShipPlacement_HPP
+#define ShipPlacement_HPP
+
 #include <iostream>
 #include <vector>
 
@@ -43,9 +46,10 @@ public:
     vector<string> enemyGrid;
 
     // functions
-    vector<string> SetGameBoard();
     void FriendlyGridIntake(string input, vector<string> &grid);
 };
+
+#endif
 
 /*
 R A1 J8

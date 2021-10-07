@@ -2,6 +2,8 @@
 #include "ShipPlacement.hpp"
 #include "BattleShip.hpp"
 
+#include "Engagement.hpp"
+
 ShipPlacement::ShipPlacement()
 {
     string row = "";
@@ -19,43 +21,6 @@ ShipPlacement::ShipPlacement()
 };
 
 ShipPlacement::~ShipPlacement(){};
-
-vector<string> ShipPlacement::SetGameBoard()
-{
-    vector<string> row;
-
-    row.push_back("                 YOUR SHIPS                                       ENEMY SHIPS               ");
-    row.push_back("");
-    row.push_back("      1   2   3   4   5   6   7   8   9                 1   2   3   4   5   6   7   8   9   ");
-    row.push_back("    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+ ");
-    row.push_back("A   |   :   :   :   :   :   :   :   :   |         A   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("B   |   :   :   :   :   :   :   :   :   |         B   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("C   |   :   :   :   :   :   :   :   :   |         C   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("D   |   :   :   :   :   :   :   :   :   |         D   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("E   |   :   :   :   :   :   :   :   :   |         E   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("F   |   :   :   :   :   :   :   :   :   |         F   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("G   |   :   :   :   :   :   :   :   :   |         G   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("H   |   :   :   :   :   :   :   :   :   |         H   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("I   |   :   :   :   :   :   :   :   :   |         I   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +---+---+---+---+---+---+---+---+---+             +---+---+---+---+---+---+---+---+---+ ");
-    row.push_back("J   |   :   :   :   :   :   :   :   :   |         J   |   :   :   :   :   :   :   :   :   | ");
-    row.push_back("    +===+===+===+===+===+===+===+===+===+             +===+===+===+===+===+===+===+===+===+ ");
-    row.push_back("");
-    row.push_back("         oo      Radar Ship  [R]                           oo      Radar Ship  [R]          ");
-    row.push_back("         ooo     Minor Ship  [M]                           ooo     Minor Ship  [M]          ");
-    row.push_back("         oooo    Destroyer   [D]                           oooo    Destroyer   [D]          ");
-    row.push_back("         ooooo   Flagship    [F]                           ooooo   Flagship    [F]          ");
-
-    return row;
-};
 
 int ShipPlacement::GetNumberDeployable(char shipType)
 {
@@ -197,9 +162,6 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
             RandomEnemyShipPlacement(4, enemyDestroyerShipPlaced);
             RandomEnemyShipPlacement(5, enemyFlagShipPlaced);
 
-            cout << "----------Enemy Ships------------" << endl;
-            for (int i = 0; i < 10; i++)
-                cout << enemyGrid[i] << endl;
         }
     }
 };
@@ -364,3 +326,4 @@ void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
         }
     }
 };
+
