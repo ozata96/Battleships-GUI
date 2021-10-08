@@ -1,3 +1,6 @@
+#ifndef BattleShip_HPP
+#define BattleShip_HPP
+
 class BattleShip
 {
 protected:
@@ -7,7 +10,7 @@ protected:
     ~BattleShip();
 
 public:
-    virtual int GetBlockNumber() = 0;
+    virtual int GetBlockNumber();
     void DestroyBlock();
 };
 
@@ -42,3 +45,5 @@ public:
     ~RadarShip();
     int GetBlockNumber() override;
 };
+
+#endif
