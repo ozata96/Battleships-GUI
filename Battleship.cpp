@@ -3,6 +3,7 @@
 // Mother Class
 BattleShip::BattleShip(int blocks) : blocks(blocks){};
 BattleShip::~BattleShip(){};
+int BattleShip::GetBlockNumber() { return blocks; };
 void BattleShip::DestroyBlock() { blocks--; };
 
 // +--------------------------------------------------------------------------+
