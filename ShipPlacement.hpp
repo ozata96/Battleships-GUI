@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -10,7 +11,6 @@ class ShipPlacement
 {
 private:
     // Friendly Ship Placement
-
 
     // Enemy Ship Placement
     bool enemyFlagShipPlaced = false;
@@ -30,7 +30,6 @@ private:
 
     // Enemy Ship Functions
     void RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType);
-    int RandomNumberGenerator(int min, int max);
 
 public:
     bool friendlyFlagShipPlaced = false;
@@ -40,13 +39,18 @@ public:
 
     ShipPlacement();
     ~ShipPlacement();
+    int RandomNumberGenerator(int min, int max);
 
     // Logic Grids
     vector<string> friendlyGrid;
     vector<string> enemyGrid;
+    map<string, char> shipTypeList;
 
     // functions
     void FriendlyGridIntake(string input, vector<string> &grid);
+    string ConvertToString(int row, int col);
+    void MarkCoordinate(int row, int col, char shipType);
+    char GetCoordinateType(int row, int col);
 };
 
 #endif

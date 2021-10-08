@@ -11,9 +11,25 @@ class GameControl
         BoardDisplay board;
         Engagement engagement;
         ShipPlacement placement;
+        
+        vector<int> guessList;
+        bool shipDetected = false;
 
     public:
         void MakeMove();
+        void EnemyMakeMove();
 };
 
 #endif
+
+
+/*
+XXXX
+. . . . . . . . . . 
+. . . . - . . . . . 
+. . . . X - . . . . 
+. . . . - . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+
+*/
