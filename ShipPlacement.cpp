@@ -108,6 +108,29 @@ void ShipPlacement::CreateShip(int numDeployed)
     }
 };
 
+string ShipPlacement::ConvertToString(int row, int col)
+{
+    string coord = "";
+    char rowChar = static_cast<char>(row);
+    char colChar = static_cast<char>(col);
+    coord.push_back(rowChar);
+    coord.push_back(colChar);
+    return coord;
+}
+
+void ShipPlacement::MarkCoordinate(int row, int col, char shipType)
+{
+    cout << shipType << endl;
+    shipTypeList[ConvertToString(row, col)] = shipType;
+};
+
+char ShipPlacement::GetCoordinateType(int row, int col)
+{
+    cout << "Hello" << endl;
+    cout << shipTypeList[ConvertToString(row, col)] << endl;
+    return shipTypeList[ConvertToString(row, col)];
+}
+
 void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
 {
     int rowStart, colStart, rowEnd, colEnd;
@@ -129,6 +152,8 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                 {
                     friendlyGrid[rowStart][i] = 'o';
                     grid[convertRowForMainGrid(rowStart)][convertColForMainGrid(i)] = 'o';
+                    MarkCoordinate(rowStart, i, input[0]);
+                    cout << "Marked" << endl;
                 }
                 else
                 {
@@ -142,16 +167,14 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                 {
                     friendlyGrid[i][colStart] = 'o';
                     grid[convertRowForMainGrid(i)][convertColForMainGrid(colStart)] = 'o';
+                    MarkCoordinate(i, colStart, input[0]);
+                    cout << "Marked" << endl;
                 }
                 else
                 {
                     cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
                     break;
                 }
-
-        // cout << "----------Friendly Ships------------" << endl;
-        // for (int i = 0; i < 10; i++)
-        //     cout << friendlyGrid[i] << endl;
 
         CreateShip(numDeployed);
         if (friendlyFlagShipPlaced && friendlyDestroyerShipPlaced && friendlyMinorShipPlaced && friendlyRadarShipPlaced)
@@ -160,6 +183,10 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
             RandomEnemyShipPlacement(3, enemyMinorShipPlaced);
             RandomEnemyShipPlacement(4, enemyDestroyerShipPlaced);
             RandomEnemyShipPlacement(5, enemyFlagShipPlaced);
+
+            cout << "----------Friendly Ships------------" << endl;
+            for (int i = 0; i < 10; i++)
+                cout << friendlyGrid[i] << endl;
         }
     }
 };
@@ -324,4 +351,3 @@ void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
         }
     }
 };
-

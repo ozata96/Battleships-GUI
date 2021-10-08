@@ -6,31 +6,80 @@ void GameControl::MakeMove()
     placement.FriendlyGridIntake("MB1B3", board.gameBoard);
     placement.FriendlyGridIntake("DC1C4", board.gameBoard);
     placement.FriendlyGridIntake("FD1D5", board.gameBoard);
-    board.PrintBoard();
-
-
+    // board.PrintBoard();
 
     int x, y;
     while (x != 20)
     {
-        cout << "----------Enemy Ships------------" << endl;
-        for (int i = 0; i < 10; i++)
-            cout << placement.enemyGrid[i] << endl;
 
-        cout << "ROW: ";
         cin >> x;
-        cout << endl
-             << "COL: ";
         cin >> y;
-        cout << endl;
 
-        // engagement.Strike(x, y, board.gameBoard);
+        placement.GetCoordinateType(x,y);
+        
+        // cout << "----------Enemy Ships------------" << endl;
+        // for (int i = 0; i < 10; i++)
+        //     cout << placement.enemyGrid[i] << endl;
+
+        // string input = "";
+        // cout << "Input: ";
+        // cin >> input;
+
+        // int rowStart = input[0] - 65;
+        // int colStart = input[1] - 49;
+
+        // engagement.Strike(rowStart, colStart, placement.enemyGrid, board.gameBoard);
         // board.PrintBoard();
-        engagement.Strike(x, y, placement.enemyGrid, board.gameBoard);
-
-        board.PrintBoard();
+        // input = "";
     }
-}
+};
 
-    // int convertedRow = ((row + 4) + (row * 2)) - row;
-    // int convertedCol = ((col + 56) + (col * 4)) - col;
+void GameControl::EnemyMakeMove()
+{
+    bool isNewGuess = false;
+    int guessRow;
+    int guessCol;
+
+    // Avoid Redundant Guesses
+    while (!isNewGuess)
+    {
+        guessRow = placement.RandomNumberGenerator(0, 9);
+        guessCol = placement.RandomNumberGenerator(0, 8);
+
+        for (int i = 0; i < guessList.size(); i++)
+        {
+            if (guessList[i] == guessRow && guessList[i + 1] == guessCol)
+                isNewGuess = false;
+            i++;
+        }
+        isNewGuess = true;
+    }
+    guessList.push_back(guessRow);
+    guessList.push_back(guessCol);
+
+    if (!shipDetected)
+    {
+        // Computer Misses!
+        if (placement.friendlyGrid[guessRow][guessCol] == '.')
+        {
+            cout << "MISS!" << endl;
+        }
+
+        // Computer Hits!
+        else if (placement.enemyGrid[guessRow][guessCol] == 'o')
+        {
+            cout << "HIT!" << endl;
+            shipDetected = true;
+        }
+    } else {
+        // Hunting Detected Ship
+
+
+
+
+    }
+
+
+
+
+};
