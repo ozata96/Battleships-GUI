@@ -25,21 +25,30 @@ private:
 
     RadarShip enemyRadar;
     RadarShip friendlyRadar;
+
+    BattleShip *placeholderShip;
     // ------------------------------------------
 
     vector<int> guessList;
     bool shipDetected = false;
+    bool orientationDetected = false;
+    string direction = "";
 
-    int detectedRow;
-    int detectedCol;
+    int detectedRow = 0;
+    int detectedCol = 0;
 
-public:
-    void MakeMove();
+    void DestroyShip();
     void EnemyMakeMove();
     bool isNewGuess(int row, int col);
-    // BattleShip GetShip(char input);
+    void DestroyShipBlock(char input);
     void EnemyMakeRandomGuess();
-    void HuntShip();
+    void FindShipOrientation();
+
+public:
+    GameControl();
+    ~GameControl();
+
+    void MakeMove();
 };
 
 #endif
