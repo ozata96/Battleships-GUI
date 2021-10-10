@@ -3,7 +3,7 @@
 
 class BattleShip
 {
-protected:
+public:
     int blocks;
     int shipCounter;
     BattleShip(int blocks);
