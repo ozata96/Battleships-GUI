@@ -33,14 +33,16 @@ private:
 
     bool shipDetected = false;
     bool orientationDetected = false;
+
     char direction;
 
     int detectedRow = 0;
     int detectedCol = 0;
-    int horizontalCounter = 0;
-    int verticalCounter = 0;
+
 
     void DestroyShip();
+    char AttackRight();
+
     void EnemyMakeMove();
     bool isNewGuess(int row, int col);
     void DestroyShipBlock(char input);
@@ -60,14 +62,3 @@ public:
 };
 
 #endif
-
-/*
-XXXX
-. . . . . . . . . . 
-. . . . - . . . . . 
-. . . . X - . . . . 
-. . . . - . . . . . 
-. . . . . . . . . . 
-. . . . . . . . . . 
-
-*/
