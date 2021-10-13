@@ -33,15 +33,19 @@ private:
 
     bool shipDetected = false;
     bool orientationDetected = false;
+    
+    bool isSwitched = false;
+
 
     char direction;
 
     int detectedRow = 0;
     int detectedCol = 0;
 
+    int leftCounter = 0;
+    int rightCounter = 0;
 
     void DestroyShip();
-    char AttackRight();
 
     void EnemyMakeMove();
     bool isNewGuess(int row, int col);
@@ -51,7 +55,9 @@ private:
     void EnemyMakeRandomGuess();
     void FindShipOrientation();
 
-    void HorizontalGuessing(char switchDirection);
+    void RightGuessing();
+    void LeftGuessing();
+
     void VerticalGuessing(char switchDirection);
 
 public:
