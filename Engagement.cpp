@@ -33,11 +33,7 @@ int Engagement::ConvertCol(int col)
 
 void Engagement::Hit(int row, int col, vector<string> &display)
 {
-<<<<<<< HEAD
     // cout << "HIT!" << endl;
-=======
-    cout << "HIT!" << endl;
->>>>>>> 2b8f1c8a8ad386ebb2388bd1ab2879ea81e7d77a
     row = ConvertRow(row);
     col = ConvertCol(col);
     display[row][col] = 'X';
@@ -45,11 +41,7 @@ void Engagement::Hit(int row, int col, vector<string> &display)
 
 void Engagement::Miss(int row, int col, vector<string> &display)
 {
-<<<<<<< HEAD
     // cout << "MISS!" << endl;
-=======
-    cout << "MISS!" << endl;
->>>>>>> 2b8f1c8a8ad386ebb2388bd1ab2879ea81e7d77a
     row = ConvertRow(row);
     col = ConvertCol(col);
     display[row][col] = '-';};

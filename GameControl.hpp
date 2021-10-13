@@ -55,10 +55,11 @@ private:
     void EnemyMakeRandomGuess();
     void FindShipOrientation();
 
-    void RightGuessing();
-    void LeftGuessing();
+    void UpGuessing();
+    void DownGuessing();
 
-    void VerticalGuessing(char switchDirection);
+    void HorizontalGuessing(int &forwardCounter, int &backwardCounter, int bufferTwo, int bufferOne);
+
 
 public:
     GameControl();
