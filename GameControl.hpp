@@ -33,9 +33,7 @@ private:
 
     bool shipDetected = false;
     bool orientationDetected = false;
-    
     bool isSwitched = false;
-
 
     char direction;
 
@@ -59,6 +57,7 @@ private:
     void DownGuessing();
 
     void HorizontalGuessing(int &forwardCounter, int &backwardCounter, int bufferTwo, int bufferOne);
+    void VerticalGuessing(int &forwardCounter, int &backwardCounter, int bufferTwo, int bufferOne);
 
 
 public:
