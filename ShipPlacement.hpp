@@ -24,14 +24,16 @@ private:
     bool CheckString(string input);
     int GetNumberDeployable(char shipType);
     bool areValidCoordinates(int numShipBlocks, int rowStart, int colStart, int rowEnd, int colEnd);
-    int convertRowForMainGrid(int row);
-    int convertColForMainGrid(int col);
+
     void CreateShip(int numDeployed);
 
     // Enemy Ship Functions
     void RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType);
 
 public:
+    int convertRowForMainGrid(int row);
+    int convertColForMainGrid(int col);
+
     bool friendlyFlagShipPlaced = false;
     bool friendlyDestroyerShipPlaced = false;
     bool friendlyMinorShipPlaced = false;

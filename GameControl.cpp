@@ -10,12 +10,11 @@ GameControl::~GameControl(){};
 
 void GameControl::MakeMove()
 {
-
-    placement.FriendlyGridIntake("FC3G3", board.gameBoard);
-    placement.FriendlyGridIntake("FC7G7", board.gameBoard);
-    placement.FriendlyGridIntake("FC5G5", board.gameBoard);
-    // placement.FriendlyGridIntake("FI3I7", board.gameBoard);
-    // board.PrintBoard();
+    placement.FriendlyGridIntake("FI3I7", board.gameBoard);
+    placement.FriendlyGridIntake("DA3A6", board.gameBoard);
+    placement.FriendlyGridIntake("MD5F5", board.gameBoard);
+    placement.FriendlyGridIntake("RA8B8", board.gameBoard);
+    board.PrintBoard();
 
     int x, y;
     while (x != 20)
@@ -32,11 +31,11 @@ void GameControl::MakeMove()
         int colStart = input[1] - 49;
 
         engagement.Strike(rowStart, colStart, placement.enemyGrid, board.gameBoard);
-        // board.PrintBoard();
         input = "";
 
         EnemyMakeMove();
 
+        board.PrintBoard();
         cout << "----------Friendly Ships------------" << endl;
         for (int i = 0; i < 10; i++)
             cout << placement.friendlyGrid[i] << endl;
@@ -47,7 +46,7 @@ bool GameControl::isNewGuess(int row, int col)
 {
     for (int i = 0; i < guessList.size(); i++)
     {
-        cout << "Row: " << guessList[i] << " , Col: " << guessList[i + 1] << endl;
+        // cout << "Row: " << guessList[i] << " , Col: " << guessList[i + 1] << endl;
         i++;
     }
     for (int i = 0; i < guessList.size(); i++)
@@ -118,20 +117,23 @@ void GameControl::EnemyMakeRandomGuess()
     if (placement.friendlyGrid[guessRow][guessCol] == '.')
     {
         placement.friendlyGrid[guessRow][guessCol] = 'x';
-        cout << "MISS!" << endl;
+        // cout << "MISS!" << endl;
+        board.gameBoard[placement.convertRowForMainGrid(guessRow)][placement.convertColForMainGrid(guessCol)] = '-';
     }
 
     // Computer Hits!
     else if (placement.friendlyGrid[guessRow][guessCol] == 'o')
     {
-        cout << "HIT!" << endl;
+        // cout << "HIT!" << endl;
         placement.friendlyGrid[guessRow][guessCol] = 'x';
         shipDetected = true;
-        cout << "ROW:" << guessList[guessList.size() - 2] << endl;
-        cout << "COL:" << guessList[guessList.size() - 1] << endl;
+        // cout << "ROW:" << guessList[guessList.size() - 2] << endl;
+        // cout << "COL:" << guessList[guessList.size() - 1] << endl;
 
         detectedRow = guessList[guessList.size() - 2];
         detectedCol = guessList[guessList.size() - 1];
+
+        board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol)] = 'X';
 
         char shipType = placement.GetCoordinateType(detectedRow, detectedCol);
         DestroyShipBlock(shipType);
@@ -140,6 +142,7 @@ void GameControl::EnemyMakeRandomGuess()
 
 void GameControl::FindShipOrientation()
 {
+    char shipType = placement.GetCoordinateType(detectedRow, detectedCol);
     // int ranNum = placement.RandomNumberGenerator(1, 4);
     // Check Top
     // switch (ranNum)
@@ -151,10 +154,13 @@ void GameControl::FindShipOrientation()
         {
             orientationDetected = true;
             direction = 'T';
-
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow - 1)][placement.convertColForMainGrid(detectedCol)] = 'X';
             char shipType = placement.GetCoordinateType(detectedRow - 1, detectedCol);
             DestroyShipBlock(shipType);
         }
+        else
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow - 1)][placement.convertColForMainGrid(detectedCol)] = '-';
+
         cout << 'T' << endl;
         guessList.push_back(detectedRow - 1);
         guessList.push_back(detectedCol);
@@ -169,10 +175,14 @@ void GameControl::FindShipOrientation()
         {
             orientationDetected = true;
             direction = 'L';
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol - 1)] = 'X';
 
             char shipType = placement.GetCoordinateType(detectedRow, detectedCol - 1);
             DestroyShipBlock(shipType);
         }
+        else
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol - 1)] = '-';
+
         cout << 'L' << endl;
         guessList.push_back(detectedRow);
         guessList.push_back(detectedCol - 1);
@@ -187,10 +197,13 @@ void GameControl::FindShipOrientation()
         {
             orientationDetected = true;
             direction = 'R';
-
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol + 1)] = 'X';
             char shipType = placement.GetCoordinateType(detectedRow, detectedCol + 1);
             DestroyShipBlock(shipType);
         }
+        else
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol + 1)] = '-';
+
         cout << 'R' << endl;
         guessList.push_back(detectedRow);
         guessList.push_back(detectedCol + 1);
@@ -205,66 +218,32 @@ void GameControl::FindShipOrientation()
         {
             orientationDetected = true;
             direction = 'D';
-
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow + 1)][placement.convertColForMainGrid(detectedCol)] = 'X';
             char shipType = placement.GetCoordinateType(detectedRow + 1, detectedCol);
             DestroyShipBlock(shipType);
         }
+        else
+                board.gameBoard[placement.convertRowForMainGrid(detectedRow + 1)][placement.convertColForMainGrid(detectedCol)] = '-';
+
         cout << 'D' << endl;
         guessList.push_back(detectedRow + 1);
         guessList.push_back(detectedCol);
         placement.friendlyGrid[detectedRow + 1][detectedCol] = 'x';
     }
+    if (GetShipBlock(shipType) == 0)
+    {
+        shipDetected = false;
+        orientationDetected = false;
+        isSwitched = false;
+        leftCounter = 0;
+        rightCounter = 0;
+        detectedCol = 0;
+        detectedRow = 0;
+    }
     // break;
 
     // }
 };
-
-// void GameControl::DownGuessing()
-// {
-//     char shipType = placement.GetCoordinateType(detectedRow, detectedCol);
-
-//     if (placement.friendlyGrid[detectedRow + 2 + rightCounter][detectedCol] == 'x')
-//         isSwitched = true;
-
-//     if (!isSwitched)
-//     {
-//         if (placement.friendlyGrid[detectedRow + 2 + rightCounter][detectedCol] != 'o')
-//             isSwitched = true;
-//         else
-//             DestroyShipBlock(shipType);
-//         placement.friendlyGrid[detectedRow + 2 + rightCounter][detectedCol] = 'x';
-//         rightCounter++;
-//         DestroyShipBlock(shipType);
-//     }
-//     else
-//     {
-//         placement.friendlyGrid[detectedRow - 1 + leftCounter][detectedCol] = 'x';
-//         leftCounter--;
-//         DestroyShipBlock(shipType);
-//     }
-// }
-
-// void GameControl::UpGuessing()
-// {
-//     char shipType = placement.GetCoordinateType(detectedRow, detectedCol);
-//     if (placement.friendlyGrid[detectedRow - 2 + leftCounter][detectedCol] == 'x')
-//         isSwitched = true;
-//     if (!isSwitched)
-//     {
-//         if (placement.friendlyGrid[detectedRow - 2 + leftCounter][detectedCol] != 'o')
-//             isSwitched = true;
-//         else
-//             DestroyShipBlock(shipType);
-//         placement.friendlyGrid[detectedRow - 2 + leftCounter][detectedCol] = 'x';
-//         leftCounter--;
-//     }
-//     else
-//     {
-//         placement.friendlyGrid[detectedRow + 1 + rightCounter][detectedCol] = 'x';
-//         rightCounter++;
-//         DestroyShipBlock(shipType);
-//     }
-// }
 
 void GameControl::VerticalGuessing(int &forwardCounter, int &backwardCounter, int bufferTwo, int bufferOne)
 {
@@ -274,17 +253,38 @@ void GameControl::VerticalGuessing(int &forwardCounter, int &backwardCounter, in
     if (!isSwitched)
     {
         if (placement.friendlyGrid[detectedRow + bufferTwo + forwardCounter][detectedCol] != 'o')
+        {
             isSwitched = true;
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow + bufferTwo + forwardCounter)][placement.convertColForMainGrid(detectedCol)] = '-';
+        }
         else
+        {
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow + bufferTwo + forwardCounter)][placement.convertColForMainGrid(detectedCol)] = 'X';
             DestroyShipBlock(shipType);
+        }
         placement.friendlyGrid[detectedRow + bufferTwo + forwardCounter][detectedCol] = 'x';
         forwardCounter = (forwardCounter + (bufferOne * -1));
+        guessList.push_back(detectedRow + bufferTwo + forwardCounter);
+        guessList.push_back(detectedCol);
     }
     else
     {
         placement.friendlyGrid[detectedRow + bufferOne + backwardCounter][detectedCol] = 'x';
+        board.gameBoard[placement.convertRowForMainGrid(detectedRow + bufferOne + backwardCounter)][placement.convertColForMainGrid(detectedCol)] = 'X';
         backwardCounter += bufferOne;
         DestroyShipBlock(shipType);
+        guessList.push_back(detectedRow + bufferTwo + forwardCounter);
+        guessList.push_back(detectedCol);
+    }
+    if (GetShipBlock(shipType) == 0)
+    {
+        shipDetected = false;
+        orientationDetected = false;
+        isSwitched = false;
+        leftCounter = 0;
+        rightCounter = 0;
+        detectedCol = 0;
+        detectedRow = 0;
     }
 };
 
@@ -296,17 +296,39 @@ void GameControl::HorizontalGuessing(int &forwardCounter, int &backwardCounter, 
     if (!isSwitched)
     {
         if (placement.friendlyGrid[detectedRow][detectedCol + bufferTwo + forwardCounter] != 'o')
+        {
             isSwitched = true;
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol + bufferTwo + forwardCounter)] = '-';
+        }
         else
+        {
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol + bufferTwo + forwardCounter)] = 'X';
             DestroyShipBlock(shipType);
+        }
+
         placement.friendlyGrid[detectedRow][detectedCol + bufferTwo + forwardCounter] = 'x';
         forwardCounter = (forwardCounter + (bufferOne * -1));
+        guessList.push_back(detectedRow);
+        guessList.push_back(detectedCol + bufferTwo + forwardCounter);
     }
     else
     {
         placement.friendlyGrid[detectedRow][detectedCol + bufferOne + backwardCounter] = 'x';
+        board.gameBoard[placement.convertRowForMainGrid(detectedRow)][placement.convertColForMainGrid(detectedCol + bufferOne + backwardCounter)] = 'X';
         backwardCounter += bufferOne;
         DestroyShipBlock(shipType);
+        guessList.push_back(detectedRow);
+        guessList.push_back(detectedCol + bufferTwo + forwardCounter);
+    }
+    if (GetShipBlock(shipType) == 0)
+    {
+        shipDetected = false;
+        orientationDetected = false;
+        isSwitched = false;
+        leftCounter = 0;
+        rightCounter = 0;
+        detectedCol = 0;
+        detectedRow = 0;
     }
 }
 
@@ -337,12 +359,11 @@ void GameControl::EnemyMakeMove()
         EnemyMakeRandomGuess();
     else if (shipDetected == true && !orientationDetected)
     {
-        cout << "yoo" << endl;
         FindShipOrientation();
     }
     else if (shipDetected == true && orientationDetected)
     {
         DestroyShip();
     }
-    cout << friendlyFlag.GetBlockNumber() << endl;
+    // cout << friendlyFlag.GetBlockNumber() << endl;
 };
