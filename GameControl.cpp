@@ -10,37 +10,81 @@ GameControl::~GameControl(){};
 
 void GameControl::MakeMove()
 {
-    placement.FriendlyGridIntake("FI3I7", board.gameBoard);
-    placement.FriendlyGridIntake("DA3A6", board.gameBoard);
-    placement.FriendlyGridIntake("MD5F5", board.gameBoard);
-    placement.FriendlyGridIntake("RA8B8", board.gameBoard);
-    board.PrintBoard();
-
-    int x, y;
-    while (x != 20)
+    string input = "";
+    while (input != "NEXT")
     {
-        // cout << "----------Enemy Ships------------" << endl;
-        // for (int i = 0; i < 10; i++)
-        //     cout << placement.enemyGrid[i] << endl;
+        placement.FriendlyGridIntake("FI3I7", board.gameBoard);
+        placement.FriendlyGridIntake("DA3A6", board.gameBoard);
+        placement.FriendlyGridIntake("MD5F5", board.gameBoard);
+        placement.FriendlyGridIntake("RA8B8", board.gameBoard);
+        board.PrintBoard();
+    }
 
-        string input = "";
+    input = "";
+    while (input != "EXIT")
+    {
         cout << "Input: ";
         cin >> input;
 
-        int rowStart = input[0] - 65;
-        int colStart = input[1] - 49;
+        if (!CheckAttackInput(input))
+        {
+            cerr << "Error: Invalid Input. Please enter input as" << endl;
+            cerr << "a capital letter followed by a number, both of which" << endl;
+            cerr << "must be on the grid above." << endl;
+            input = "";
+        }
+        else
+        {
+            int rowStart = input[0] - 65;
+            int colStart = input[1] - 49;
 
-        engagement.Strike(rowStart, colStart, placement.enemyGrid, board.gameBoard);
-        input = "";
+            engagement.Strike(rowStart, colStart, placement.enemyGrid, board.gameBoard);
+            if (placement.enemyGrid[rowStart][colStart] == 'o')
+                enemyBlockShipCount--;
 
-        EnemyMakeMove();
+            input = "";
 
-        board.PrintBoard();
-        cout << "----------Friendly Ships------------" << endl;
-        for (int i = 0; i < 10; i++)
-            cout << placement.friendlyGrid[i] << endl;
+            EnemyMakeMove();
+
+            board.PrintBoard();
+
+            if (enemyBlockShipCount == 0)
+                TriggerWin("PLAYER");
+
+            // cout << "----------Friendly Ships------------" << endl;
+            // for (int i = 0; i < 10; i++)
+            //     cout << placement.friendlyGrid[i] << endl;
+
+            // cout << "----------Enemy Ships------------" << endl;
+            // for (int i = 0; i < 10; i++)
+            //     cout << placement.enemyGrid[i] << endl;
+        }
     }
 };
+
+bool CheckPlacementInput(string input) {}
+
+bool CheckAttackInput(string input) {}
+
+void GameControl::TriggerWin(string type)
+{
+    if (type == "BOT")
+    {
+        cout << "BOT WINS GAME!" << endl;
+        cout << "Good luck next time!" << endl;
+        exit(0);
+    }
+    else if (type == "PLAYER")
+    {
+        cout << "CONGRATULATIONS! YOU HAVE WON!" << endl;
+        exit(0);
+    }
+    else if (type == "TIE")
+    {
+        cout << "It's a stalemate!" << endl;
+        exit(0);
+    }
+}
 
 bool GameControl::isNewGuess(int row, int col)
 {
@@ -223,7 +267,7 @@ void GameControl::FindShipOrientation()
             DestroyShipBlock(shipType);
         }
         else
-                board.gameBoard[placement.convertRowForMainGrid(detectedRow + 1)][placement.convertColForMainGrid(detectedCol)] = '-';
+            board.gameBoard[placement.convertRowForMainGrid(detectedRow + 1)][placement.convertColForMainGrid(detectedCol)] = '-';
 
         cout << 'D' << endl;
         guessList.push_back(detectedRow + 1);
@@ -365,5 +409,8 @@ void GameControl::EnemyMakeMove()
     {
         DestroyShip();
     }
-    // cout << friendlyFlag.GetBlockNumber() << endl;
+    if (friendlyFlag.GetBlockNumber() == 0 && friendlyDestroyer.GetBlockNumber() == 0 && friendlyRadar.GetBlockNumber() == 0 && friendlyMinor.GetBlockNumber() == 0)
+    {
+        TriggerWin("BOT");
+    }
 };

@@ -13,20 +13,10 @@ private:
     Engagement engagement;
     ShipPlacement placement;
 
-    // Ships-------------------------------------
-    FlagShip enemyFlag;
     FlagShip friendlyFlag;
-
-    DestroyerShip enemyDestroyer;
     DestroyerShip friendlyDestroyer;
-
-    MinorShip enemyMinor;
     MinorShip friendlyMinor;
-
-    RadarShip enemyRadar;
     RadarShip friendlyRadar;
-
-    // ------------------------------------------
 
     vector<int> guessList;
     vector<int> foundShipsList;
@@ -42,6 +32,7 @@ private:
 
     int leftCounter = 0;
     int rightCounter = 0;
+    int enemyBlockShipCount = 14;
 
     void DestroyShip();
 
@@ -49,7 +40,7 @@ private:
     bool isNewGuess(int row, int col);
     void DestroyShipBlock(char input);
     int GetShipBlock(char shipType);
-
+   
     void EnemyMakeRandomGuess();
     void FindShipOrientation();
 
@@ -59,6 +50,10 @@ private:
     void HorizontalGuessing(int &forwardCounter, int &backwardCounter, int bufferTwo, int bufferOne);
     void VerticalGuessing(int &forwardCounter, int &backwardCounter, int bufferTwo, int bufferOne);
 
+    void TriggerWin(string type);
+
+    bool CheckAttackInput(string input);
+    bool CheckPlacementInput(string input);
 
 public:
     GameControl();
