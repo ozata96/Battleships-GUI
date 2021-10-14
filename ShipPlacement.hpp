@@ -31,6 +31,8 @@ private:
     void RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType);
 
 public:
+    int placementCounter = 0;
+    bool overlapFlag = false;
     int convertRowForMainGrid(int row);
     int convertColForMainGrid(int col);
 

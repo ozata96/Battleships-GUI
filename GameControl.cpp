@@ -13,16 +13,54 @@ void GameControl::MakeMove()
     string input = "";
     while (input != "NEXT")
     {
-        placement.FriendlyGridIntake("FI3I7", board.gameBoard);
-        placement.FriendlyGridIntake("DA3A6", board.gameBoard);
-        placement.FriendlyGridIntake("MD5F5", board.gameBoard);
-        placement.FriendlyGridIntake("RA8B8", board.gameBoard);
-        board.PrintBoard();
+        if (!placement.overlapFlag && !invalidInputFlag)
+        {
+            board.PrintBoard();
+            cout << "Welcome to Battleships. Above is the game board. Note the ship symbols." << endl;
+            cout << "[F] is for flag ship, [D] is for destroyer, [M] is for minor ship, and [R] is for radar ship." << endl;
+            cout << "Please place your ships onto the board in the following format." << endl;
+            cout << "Example: FA1A5" << endl;
+            cout << "The first character is the ship type F, D, M, or R. The 2nd and 3rd characters are " << endl;
+            cout << "The beginning of the ship, and the 4th and 5th are the end of the ship." << endl;
+            cout << "A flagship must be allocated 5 squares, a destroyer 4, a minor ship 3, and a radar ship 2." << endl;
+
+            cout << "Alternatively, for automatic deployement, please type DEPLOY in all caps." << endl;
+        }
+
+        cout << "Input: ";
+        cin >> input;
+
+        if (input == "DEPLOY")
+        {
+            placement.FriendlyGridIntake("FI3I7", board.gameBoard);
+            placement.FriendlyGridIntake("DA3A6", board.gameBoard);
+            placement.FriendlyGridIntake("MD5F5", board.gameBoard);
+            placement.FriendlyGridIntake("RA8B8", board.gameBoard);
+            board.PrintBoard();
+            break;
+        }
+        else if (!CheckPlacementInput(input))
+        {
+            invalidInputFlag = true;
+            cerr << "Error: Invalid Input. Please enter input like this example: FI3I7." << endl;
+            cerr << "Cannot deploy the same ship twice." << endl;
+            input = "";
+        }
+        else
+        {
+            invalidInputFlag = false;
+            placement.FriendlyGridIntake(input, board.gameBoard);
+            input = "";
+            if (placement.placementCounter == 4)
+                break;
+        }
     }
 
     input = "";
     while (input != "EXIT")
     {
+        board.PrintBoard();
+        cout << "Target the enemy ships!" << endl;
         cout << "Input: ";
         cin >> input;
 
@@ -33,8 +71,15 @@ void GameControl::MakeMove()
             cerr << "must be on the grid above." << endl;
             input = "";
         }
+        else if (!CheckUniquePlayerMove(input))
+        {
+            cerr << "Redundant Move: You have already played that." << endl;
+            cerr << "Please select a new unique move." << endl;
+            input = "";
+        }
         else
         {
+            playerMoves.push_back(input);
             int rowStart = input[0] - 65;
             int colStart = input[1] - 49;
 
@@ -62,9 +107,66 @@ void GameControl::MakeMove()
     }
 };
 
-bool CheckPlacementInput(string input) {}
+bool GameControl::CheckUniquePlayerMove(string input)
+{
+    for (int i = 0; i < playerMoves.size(); i++)
+        if (input == playerMoves[i])
+            return false;
+    return true;
+}
 
-bool CheckAttackInput(string input) {}
+bool GameControl::CheckPlacementInput(string input)
+{
+    string charOne = "ABCDEFGHIJ";
+    string charTwo = "123456789";
+
+    if (input.length() < 5 || input.length() > 5)
+        return false;
+
+    if (input[0] != 'F' && input[0] != 'D' && input[0] != 'M' && input[0] != 'R')
+        return false;
+
+    for (int i = 0; i < deployedShips.size(); i++)
+        if (input[0] == deployedShips[i])
+            return false;
+
+    for (int i = 0; i < charOne.length(); i++)
+        if (input[1] == charOne[i])
+            for (int m = 0; m < charOne.length(); m++)
+                if (input[3] == charOne[m])
+                    for (int j = 0; j < charTwo.length(); j++)
+                        if (input[2] == charTwo[j])
+                            for (int k = 0; k < charTwo.length(); k++)
+                                if (input[4] == charTwo[k])
+                                {
+                                    deployedShips.push_back(input[0]);
+                                    return true;
+                                }
+
+    return false;
+}
+
+bool GameControl::CheckAttackInput(string input)
+{
+    string charOne = "ABCDEFGHIJ";
+    string charTwo = "123456789";
+
+    if (input.length() < 2 || input.length() > 2)
+        return false;
+
+    for (int i = 0; i < charOne.length(); i++)
+    {
+        if (input[0] == charOne[i])
+        {
+            for (int j = 0; j < charTwo.length(); j++)
+            {
+                if (input[1] == charTwo[j])
+                    return true;
+            }
+        }
+    }
+    return false;
+}
 
 void GameControl::TriggerWin(string type)
 {

@@ -146,10 +146,13 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                     friendlyGrid[rowStart][i] = 'o';
                     grid[convertRowForMainGrid(rowStart)][convertColForMainGrid(i)] = 'o';
                     MarkCoordinate(rowStart, i, input[0]);
+                    overlapFlag = false;
+                    placementCounter++;
                 }
                 else
                 {
                     cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
+                    overlapFlag = true;
                     break;
                 }
 
@@ -160,13 +163,15 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                     friendlyGrid[i][colStart] = 'o';
                     grid[convertRowForMainGrid(i)][convertColForMainGrid(colStart)] = 'o';
                     MarkCoordinate(i, colStart, input[0]);
+                    overlapFlag = false;
+                    placementCounter++;
                 }
                 else
                 {
                     cerr << "Error: Cannot overlap ships, please choose another placement" << endl;
+                    overlapFlag = true;
                     break;
                 }
-
         CreateShip(numDeployed);
         if (friendlyFlagShipPlaced && friendlyDestroyerShipPlaced && friendlyMinorShipPlaced && friendlyRadarShipPlaced)
         {
@@ -183,7 +188,6 @@ int ShipPlacement::RandomNumberGenerator(int min, int max)
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
-    // cout << dist6(rng) << " ";
     return dist6(rng);
 }
 

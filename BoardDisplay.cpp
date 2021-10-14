@@ -42,7 +42,9 @@ void BoardDisplay::SetBoard()
 
 void BoardDisplay::PrintBoard()
 {
-    cout << endl << endl << endl;
+    for (int i = 0; i < 50; i++)
+        cout << endl;
+
     for (int i = 0; i < gameBoard.size(); i++)
     {
         cout << gameBoard[i] << endl;

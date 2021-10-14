@@ -20,10 +20,13 @@ private:
 
     vector<int> guessList;
     vector<int> foundShipsList;
+    vector<string> playerMoves;
+    vector<char> deployedShips;
 
     bool shipDetected = false;
     bool orientationDetected = false;
     bool isSwitched = false;
+    bool invalidInputFlag = false;
 
     char direction;
 
@@ -40,6 +43,7 @@ private:
     bool isNewGuess(int row, int col);
     void DestroyShipBlock(char input);
     int GetShipBlock(char shipType);
+    bool CheckUniquePlayerMove(string input);
    
     void EnemyMakeRandomGuess();
     void FindShipOrientation();
