@@ -8,6 +8,7 @@ This program was designed to recreate the traditional board game called battlesh
 * The Battleship Bot
 * Interacting with the GUI
 * Win Conditions
+* How to Play
 
 
 # Battle Interface
@@ -361,8 +362,23 @@ I  | -  |  - |    |    |    | -  |    |  - |
 J  | -  |    |    | X  | X  |  X |  X | X  |   
   </td></tr> </table>
 
-
-
-
+# How to Download and Play
+In order to try this out yourself, please download the github repositry and run it in a C++ environment. The game should immediately begin within the terminal.
+<br /> 
+<br /> 
+<br /> Type in commands in the following format:
+<br /> 
+<br /> DEPLOY - deploys ships automatically.
+<br /> FA1A5 - deploys flagship from A1 to A5 on your grid
+<br /> RE6E7 - deploys radar ship from E6 to E7 on your grid
+<br /> DJ1J4 - deploys destroyer ship from J1 to J4 on your grid
+<br /> MG6G8 - deploys minor ship from G6 to G8 on your grid
+<br /> 
+<br /> 
+<br /> After deployment is complete, you can type in commands in the following way:
+<br /> 
+<br /> E6 uncovers square E6 on the enemy grid
+<br /> A1 uncovers square A1 on the enemy grid
+<br /> J5 uncovers square J5 on the enemy grid
 
 
