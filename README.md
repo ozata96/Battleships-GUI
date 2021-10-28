@@ -60,7 +60,7 @@ J  |    |    |    |    |    |    |    |    |
 <br /> The following demonstrates these two types of deployments:
 
 ## Typing in: "DEPLOY"
-<br /> This will randomly deploy all available ships onto the grid.
+<br /> This will deploy a pre-set template of all available ships onto the grid.
 
 <table>
 <tr><th>YOUR SHIPS </th><th>ENEMY SHIPS</th></tr>
@@ -68,15 +68,15 @@ J  |    |    |    |    |    |    |    |    |
 
  .  | 1  | 2  | 3  | 4  |  5 | 6  | 7  | 8  | 9  |   
 -- | -- | -- | -- | -- | -- | -- | -- | -- | --
-A  |  o |    |    |    |    |    |    |    | 
-B  |  o |    |    |    |    |    |    |    | 
-C  |    |    |    |    |  o |    |    |  o | 
-D  |    |    |    |    |  o |    |    |  o | 
-E  |    |    |    |    |  o |    |    |  o | 
-F  |    |    |    |    |  o |    |    |  o | 
-G  |    |    |    |    |    |    |    |  o | 
-H  |    |  o |  o | o  |    |    |    |    | 
-I  |    |    |    |    |    |    |    |    | 
+A  |    |    | o  |  o |  o | o  |    | o  | 
+B  |    |    |    |    |    |    |    | o  | 
+C  |    |    |    |    |    |    |    |    | 
+D  |    |    |    |    | o  |    |    |    | 
+E  |    |    |    |    | o  |    |    |    | 
+F  |    |    |    |    | o  |    |    |    | 
+G  |    |    |    |    |    |    |    |    | 
+H  |    |    |    |    |    |    |    |    | 
+I  |    |    |  o | o  | o  | o  |o   |    | 
 J  |    |    |    |    |    |    |    |    | 
 
 </td><td>
