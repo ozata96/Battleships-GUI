@@ -140,14 +140,16 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
     else
     {
         if (rowStart == rowEnd)
+        {
+            placementCounter++;
             for (int i = colStart; i <= colEnd; i++)
+            {
                 if (friendlyGrid[rowStart][i] == '.')
                 {
                     friendlyGrid[rowStart][i] = 'o';
                     grid[convertRowForMainGrid(rowStart)][convertColForMainGrid(i)] = 'o';
                     MarkCoordinate(rowStart, i, input[0]);
                     overlapFlag = false;
-                    placementCounter++;
                 }
                 else
                 {
@@ -155,16 +157,19 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                     overlapFlag = true;
                     break;
                 }
-
+            }
+        }
         else if (colStart == colEnd)
+        {
+            placementCounter++;
             for (int i = rowStart; i <= rowEnd; i++)
+            {
                 if (friendlyGrid[i][colStart] == '.')
                 {
                     friendlyGrid[i][colStart] = 'o';
                     grid[convertRowForMainGrid(i)][convertColForMainGrid(colStart)] = 'o';
                     MarkCoordinate(i, colStart, input[0]);
                     overlapFlag = false;
-                    placementCounter++;
                 }
                 else
                 {
@@ -172,78 +177,58 @@ void ShipPlacement::FriendlyGridIntake(string input, vector<string> &grid)
                     overlapFlag = true;
                     break;
                 }
-        CreateShip(numDeployed);
-        if (friendlyFlagShipPlaced && friendlyDestroyerShipPlaced && friendlyMinorShipPlaced && friendlyRadarShipPlaced)
+            }
+        }
+            CreateShip(numDeployed);
+            if (friendlyFlagShipPlaced && friendlyDestroyerShipPlaced && friendlyMinorShipPlaced && friendlyRadarShipPlaced)
+            {
+                RandomEnemyShipPlacement(2, enemyRadarShipPlaced);
+                RandomEnemyShipPlacement(3, enemyMinorShipPlaced);
+                RandomEnemyShipPlacement(4, enemyDestroyerShipPlaced);
+                RandomEnemyShipPlacement(5, enemyFlagShipPlaced);
+            }
+        }
+    };
+
+    int ShipPlacement::RandomNumberGenerator(int min, int max)
+    {
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
+        return dist6(rng);
+    }
+
+    void ShipPlacement::ClearGrid(vector<string> & grid, vector<int> targetCoordinates)
+    {
+        for (int i = 0; i < targetCoordinates.size(); i++)
         {
-            RandomEnemyShipPlacement(2, enemyRadarShipPlaced);
-            RandomEnemyShipPlacement(3, enemyMinorShipPlaced);
-            RandomEnemyShipPlacement(4, enemyDestroyerShipPlaced);
-            RandomEnemyShipPlacement(5, enemyFlagShipPlaced);
+            grid[targetCoordinates[i]][targetCoordinates[i + 1]] = '.';
+            // cout << targetCoordinates[i] << "," << targetCoordinates[i + 1] << endl;
+            i++;
         }
     }
-};
 
-int ShipPlacement::RandomNumberGenerator(int min, int max)
-{
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
-    return dist6(rng);
-}
-
-void ShipPlacement::ClearGrid(vector<string> &grid, vector<int> targetCoordinates)
-{
-    for (int i = 0; i < targetCoordinates.size(); i++)
+    void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
     {
-        grid[targetCoordinates[i]][targetCoordinates[i + 1]] = '.';
-        // cout << targetCoordinates[i] << "," << targetCoordinates[i + 1] << endl;
-        i++;
-    }
-}
+        int count = 0;
+        int tracker = 0;
+        vector<int> tempCoordinates;
 
-void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
-{
-    int count = 0;
-    int tracker = 0;
-    vector<int> tempCoordinates;
-
-    while (enemyShipType == false)
-    {
-        int flip = RandomNumberGenerator(0, 1);
-
-        // Flagship Placement
-        int rowStart = RandomNumberGenerator(0, 9);
-        int colStart = RandomNumberGenerator(0, 8);
-
-        // cout << rowStart << " , " << colStart << endl;
-        // enemyGrid[rowStart][colStart] = 'o';
-
-        if (flip == 0)
+        while (enemyShipType == false)
         {
-            // VERTICAL
-            for (int i = rowStart; i >= 0; i--)
-            {
-                tracker++;
-                if (enemyGrid[i][colStart] == '.')
-                {
-                    enemyGrid[i][colStart] = 'o';
-                    count++;
-                    tempCoordinates.push_back(i);
-                    tempCoordinates.push_back(colStart);
-                }
-                if (count == shipBlocks)
-                    break;
-                if (count != tracker)
-                    break;
-            }
-            if (count < shipBlocks)
-            {
-                ClearGrid(enemyGrid, tempCoordinates);
-                tempCoordinates.clear();
-                count = 0;
-                tracker = 0;
+            int flip = RandomNumberGenerator(0, 1);
 
-                for (int i = rowStart; i < 10; i++)
+            // Flagship Placement
+            int rowStart = RandomNumberGenerator(0, 9);
+            int colStart = RandomNumberGenerator(0, 8);
+
+            // cout << rowStart << " , " << colStart << endl;
+            // enemyGrid[rowStart][colStart] = 'o';
+
+            if (flip == 0)
+            {
+                // VERTICAL
+                for (int i = rowStart; i >= 0; i--)
                 {
                     tracker++;
                     if (enemyGrid[i][colStart] == '.')
@@ -264,48 +249,49 @@ void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
                     tempCoordinates.clear();
                     count = 0;
                     tracker = 0;
+
+                    for (int i = rowStart; i < 10; i++)
+                    {
+                        tracker++;
+                        if (enemyGrid[i][colStart] == '.')
+                        {
+                            enemyGrid[i][colStart] = 'o';
+                            count++;
+                            tempCoordinates.push_back(i);
+                            tempCoordinates.push_back(colStart);
+                        }
+                        if (count == shipBlocks)
+                            break;
+                        if (count != tracker)
+                            break;
+                    }
+                    if (count < shipBlocks)
+                    {
+                        ClearGrid(enemyGrid, tempCoordinates);
+                        tempCoordinates.clear();
+                        count = 0;
+                        tracker = 0;
+                    }
+
+                    if (count == shipBlocks)
+                    {
+                        tempCoordinates.clear();
+                        enemyShipType = true;
+                    }
                 }
 
-                if (count == shipBlocks)
+                else if (count == shipBlocks)
                 {
                     tempCoordinates.clear();
                     enemyShipType = true;
                 }
             }
 
-            else if (count == shipBlocks)
+            else
             {
-                tempCoordinates.clear();
-                enemyShipType = true;
-            }
-        }
+                // HORIZONTAL
 
-        else
-        {
-            // HORIZONTAL
-
-            for (int i = colStart; i >= 0; i--)
-            {
-                tracker++;
-                if (enemyGrid[rowStart][i] == '.')
-                {
-                    enemyGrid[rowStart][i] = 'o';
-                    count++;
-                    tempCoordinates.push_back(rowStart);
-                    tempCoordinates.push_back(i);
-                }
-                if (count == shipBlocks)
-                    break;
-                if (count != tracker)
-                    break;
-            }
-            if (count < shipBlocks)
-            {
-                ClearGrid(enemyGrid, tempCoordinates);
-                tempCoordinates.clear();
-                count = 0;
-                tracker = 0;
-                for (int i = colStart; i < 9; i++)
+                for (int i = colStart; i >= 0; i--)
                 {
                     tracker++;
                     if (enemyGrid[rowStart][i] == '.')
@@ -326,19 +312,40 @@ void ShipPlacement::RandomEnemyShipPlacement(int shipBlocks, bool enemyShipType)
                     tempCoordinates.clear();
                     count = 0;
                     tracker = 0;
-                }
+                    for (int i = colStart; i < 9; i++)
+                    {
+                        tracker++;
+                        if (enemyGrid[rowStart][i] == '.')
+                        {
+                            enemyGrid[rowStart][i] = 'o';
+                            count++;
+                            tempCoordinates.push_back(rowStart);
+                            tempCoordinates.push_back(i);
+                        }
+                        if (count == shipBlocks)
+                            break;
+                        if (count != tracker)
+                            break;
+                    }
+                    if (count < shipBlocks)
+                    {
+                        ClearGrid(enemyGrid, tempCoordinates);
+                        tempCoordinates.clear();
+                        count = 0;
+                        tracker = 0;
+                    }
 
-                if (count == shipBlocks)
+                    if (count == shipBlocks)
+                    {
+                        tempCoordinates.clear();
+                        enemyShipType = true;
+                    }
+                }
+                else if (count == shipBlocks)
                 {
                     tempCoordinates.clear();
                     enemyShipType = true;
                 }
             }
-            else if (count == shipBlocks)
-            {
-                tempCoordinates.clear();
-                enemyShipType = true;
-            }
         }
-    }
-};
+    };

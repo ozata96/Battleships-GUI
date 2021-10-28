@@ -52,14 +52,16 @@ void GameControl::MakeMove()
             placement.FriendlyGridIntake(input, board.gameBoard);
             input = "";
             if (placement.placementCounter == 4)
+            {
+                board.PrintBoard();
                 break;
+            }
         }
     }
 
     input = "";
     while (input != "EXIT")
     {
-        board.PrintBoard();
         cout << "Target the enemy ships!" << endl;
         cout << "Input: ";
         cin >> input;
