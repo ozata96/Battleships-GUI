@@ -3,6 +3,7 @@
 ## Introduction
 This program was designed to recreate the traditional board game called battleship. It contains a battle interface GUI that can be interacted with using the command line in the terminal. 
 <br />
+<br />
 <br />The README is divided into the following sections:
 * The Battle Interface GUI
 * The Battleship Bot
